@@ -1,0 +1,20 @@
+name: Manual Docker Build
+
+on:
+  workflow_dispatch:
+    inputs:
+      service:
+        description: 'Service to build (e.g. hello, omgwtfbbq)'
+        required: true
+        type: string
+      version:
+        description: 'Optional version override (e.g. dev-test, v1.2.3)'
+        required: false
+        default: ""
+
+jobs:
+  build:
+    uses: ./.github/workflows/docker-build-service.yml
+    with:
+      service: ${{ inputs.service }}
+      version: ${{ inputs.version }}

@@ -1,0 +1,65 @@
+{
+  "include-v-in-tag": true,
+  "separate-pull-requests": true,
+  "draft-pull-request": false,
+  "draft": false,
+  "packages": {
+    ".": {
+      "path": "src",
+      "package-name": "omgwtfbbq",
+      "component": "omgwtfbbq",
+      "release-type": "rust",
+      "includePaths": ["src/", "Cargo.toml"]
+    },
+    "crates/hello": {
+      "path": "crates/hello",
+      "package-name": "crate-hello",
+      "component": "hello",
+      "release-type": "rust",
+      "includePaths": ["crates/hello/"]
+    },
+    "crates/goodbye": {
+      "path": "crates/goodbye",
+      "package-name": "crate-goodbye",
+      "component": "goodbye",
+      "release-type": "rust",
+      "includePaths": ["crates/goodbye/"]
+    },
+    "crates/alright": {
+      "path": "crates/alright",
+      "package-name": "crate-alright",
+      "component": "alright",
+      "release-type": "rust",
+      "includePaths": ["crates/alright/"]
+    },
+    "chart": {
+      "path": "chart",
+      "package-name": "chart-omgwtfbbq",
+      "component": "chart-omgwtfbbq",
+      "release-type": "helm",
+      "includePaths": ["chart/", "src/", "Cargo.toml"]
+    },
+    "charts/hello": {
+      "path": "charts/hello",
+      "package-name": "chart-hello",
+      "component": "chart-hello",
+      "release-type": "helm",
+      "includePaths": ["charts/hello/", "crates/hello/"]
+    },
+    "charts/goodbye": {
+      "path": "charts/goodbye",
+      "package-name": "chart-goodbye",
+      "component": "chart-goodbye",
+      "release-type": "helm",
+      "includePaths": ["charts/goodbye/", "crates/goodbye/"]
+    },
+    "charts/alright": {
+      "path": "charts/alright",
+      "package-name": "chart-alright",
+      "component": "chart-alright",
+      "release-type": "helm",
+      "includePaths": ["charts/alright/", "crates/alright/"]
+    }
+  },
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json"
+}

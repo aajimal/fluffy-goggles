@@ -1,0 +1,44 @@
+name: Build and Push Docker Images (Matrix)
+
+on:
+  push:
+    branches: [main]
+    tags: ["*v[0-9]+.[0-9]+.[0-9]+"]
+    paths:
+      - 'Dockerfile'
+
+  pull_request:
+    branches: [main]
+    paths:
+      - 'Dockerfile'
+
+jobs:
+  generate-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      services: ${{ steps.set-matrix.outputs.services }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Extract crate services from manifest
+        id: set-matrix
+        run: |
+          services=$(jq -r 'to_entries
+                      | map(select(.key == "." or (.key | startswith("crates/"))))
+                      | map(.key
+                          | sub("^\\.$"; "omgwtfbbq")
+                          | sub("^crates/"; ""))
+                    ' .release-please-manifest.json | jq -c)
+
+          echo "services=$services"
+          echo "services=$services" >> $GITHUB_OUTPUT
+
+  call-build-service:
+    needs: generate-matrix
+    strategy:
+      matrix:
+        service: ${{ fromJson(needs.generate-matrix.outputs.services) }}
+
+    uses: ./.github/workflows/docker-build-service.yml
+    with:
+      service: ${{ matrix.service }}
