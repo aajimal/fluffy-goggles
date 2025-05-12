@@ -1,0 +1,99 @@
+name: release-please
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+
+jobs:
+  release-please:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # - name: Check for skip-release label
+      #   id: check_label
+      #   run: |
+      #     echo "Checking for 'skip-release' label..."
+      #     SKIP_RELEASE=false
+      #     for label in "${{ toJson(github.event.pull_request.labels) }}" ; do
+      #       if echo "$label" | grep -q '"name":"skip-release"'; then
+      #         SKIP_RELEASE=true
+      #         break
+      #       fi
+      #     done
+      #     echo "SKIP_RELEASE=$SKIP_RELEASE" >> $GITHUB_ENV
+
+      # - name: Fetch base and head commits
+      #   if: env.SKIP_RELEASE != 'true'
+      #   run: |
+      #     git fetch origin ${{ github.event.pull_request.base.ref }}
+      #     git fetch origin ${{ github.event.pull_request.head.ref }}
+
+      # - name: Check for relevant file changes
+      #   if: env.SKIP_RELEASE != 'true'
+      #   id: check_changes
+      #   run: |
+      #     echo "🔍 Checking diff between base and merged commit..."
+      #     git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.merge_commit_sha }} > changed_files.txt
+      #     cat changed_files.txt
+
+      #     INCLUDE_DIRS=("src/" "chart/")
+      #     EXCLUDE_PATTERNS=(".*\\.md$" ".*\\.txt$")
+      #     RELEVANT_CHANGE=false
+
+      #     while read -r file; do
+      #       for dir in "${INCLUDE_DIRS[@]}"; do
+      #         if [[ "$file" == "$dir"* ]]; then
+      #           SKIP=false
+      #           for pattern in "${EXCLUDE_PATTERNS[@]}"; do
+      #             if [[ "$file" =~ $pattern ]]; then
+      #               SKIP=true
+      #               break
+      #             fi
+      #           done
+      #           if [ "$SKIP" = false ]; then
+      #             echo "✅ Relevant file: $file"
+      #             RELEVANT_CHANGE=true
+      #             break 2
+      #           fi
+      #         fi
+      #       done
+      #     done < changed_files.txt
+
+      #     echo "RELEVANT_CHANGE=$RELEVANT_CHANGE" >> $GITHUB_ENV
+
+      # - name: Detect release type from labels
+      #   if: env.SKIP_RELEASE != 'true'
+      #   id: get_release_type
+      #   run: |
+      #     echo "Checking for release type labels..."
+      #     RELEASE_TYPE=""
+      #     for label in "${{ toJson(github.event.pull_request.labels) }}" ; do
+      #       if echo "$label" | grep -q '"name":"release:patch"'; then
+      #         RELEASE_TYPE="patch"
+      #         break
+      #       elif echo "$label" | grep -q '"name":"release:minor"'; then
+      #         RELEASE_TYPE="minor"
+      #         break
+      #       elif echo "$label" | grep -q '"name":"release:major"'; then
+      #         RELEASE_TYPE="major"
+      #         break
+      #       fi
+      #     done
+      #     echo "RELEASE_TYPE=$RELEASE_TYPE" >> $GITHUB_ENV
+
+      - name: Run release-please
+        # if: env.SKIP_RELEASE != 'true' && env.RELEVANT_CHANGE == 'true'
+        uses: googleapis/release-please-action@v4
+        with:
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+          token: ${{ secrets.RELEASE_PLEASE_GITHUB_TOKEN }}
+          # release-type: ${{ env.RELEASE_TYPE }}
+        env:
+          LOG_LEVEL: debug

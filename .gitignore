@@ -1,0 +1,34 @@
+# Token and secrets
+.secret/
+.env
+
+# release-please state
+artifacts/
+
+# Changelog test files
+changelog-test.txt
+
+# Node related
+node_modules/
+build/
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+tmp/
+*repomix*
+
+# Rust related
+target/
+
+# IDEs and editors
+/.idea/
+/.vscode/
+/*.iml
+*.orig
