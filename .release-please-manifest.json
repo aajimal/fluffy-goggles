@@ -3,7 +3,7 @@
   "crates/hello": "0.2.1",
   "crates/goodbye": "0.3.0",
   "crates/alright": "0.1.7",
-  "chart": "0.5.2",
+  "chart": "0.5.3",
   "charts/hello": "0.2.1",
   "charts/goodbye": "0.3.0",
   "charts/alright": "0.1.7"
